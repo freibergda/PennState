@@ -45,7 +45,7 @@ def main():
         # for i in range(len(row)):
         # disp_row = disp_row + str(row[i]) +'\t'
         # st.write(disp_row)
-        disp_row = ''
+        disp_row = 'hello '
         for i in range(len(row)):
             disp_row = disp_row + (str(row[i]))
         st.write(disp_row)
