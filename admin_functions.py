@@ -1,20 +1,10 @@
-'''This is the admin_functions.py'''
+'''This modules tests the admin functions.py'''
 import sqlite3
 import streamlit as st
+import create_birdsites_database
+import make_locations_table
 
-
-def make_database():
-    '''this module creates the database'''
-    # call sqlite3
-    con = sqlite3.connect("BirdSites.db")
-    cur = con.cursor()
-    cur.execute("drop table if exists locations")
-    cur.execute("CREATE TABLE if not exists locations(pk_loc, loc_full_name, county_name, state_name, geolocation, linkToNWSSite, linkToParkWebSite, linkToeBirdSite, linkToBirdCastSite)")
-    con.commit()
-    con.close()
-    return
-
-def fill_database():
+def load_locations_table():
     '''Put the data into the database (mimic the adminstrator)'''
     con = sqlite3.connect("BirdSites.db")
     cur = con.cursor()
@@ -28,27 +18,34 @@ def fill_database():
 
 
 def main():
-    '''this is the main module'''
-    make_database()
-    fill_database()
+    '''this is the main module, which will test the admin functions'''
+    create_birdsites_database.create_birdsites()
+    
+    make_locations_table.make_locations_table()
+
+    # mimic the administrator by loading the locations table
+    load_locations_table()
+
+    # Display the locations table (static, final will be dynamic so that Administrator can create or edit)
+    # Set page variables
     st.set_page_config(layout="wide")
     st.title("BirdSites Database")
-    new_con = sqlite3.connect("BirdSites.db")
-    new_cur = new_con.cursor()
-    for row in new_cur.execute("SELECT pk_loc, loc_full_name, county_name, state_name, geolocation, linkToNWSSite, linkToParkWebSite, linkToeBirdSite, linkToBirdCastSite FROM locations"):
-        # print(row)
-        # st.write(row)
-        # st.write(str(row))
-        # converted = ''.join([str(x) for x in row])
-        # st.write(converted)
-        # disp_row = ''
-        # for i in range(len(row)):
-        # disp_row = disp_row + str(row[i]) +'\t'
-        # st.write(disp_row)
-        disp_row = 'hello '
-        for i in range(len(row)):
-            disp_row = disp_row + (str(row[i]))
-        st.write(disp_row)
+    st.title("Locations Table")
+
+    # The following sets up a connection to BirdSites_db using a SQLAlchemy Engine
+    # Create the SQL connection as specified in the /.streamlit/secrets.toml file.
+    conn = st.connection('BirdSites_db', type='sql')
+
+    # Query and display the locations data
+    locations = conn.query("select * from locations")
+    st.dataframe(locations)
+
+    # Drop the table so that the data loaded by script won't accumulate
+    con = sqlite3.connect("BirdSites.db")
+    con.execute("DROP TABLE locations")
+    con.commit()
+    con.close()
+
 
 if __name__ == "__main__":
     main()

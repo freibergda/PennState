@@ -12,8 +12,8 @@ def create_birdsites():
         conn = sqlite3.connect(database_name)
         print("Database BirdSites.db created.")
         conn.close()
-    except sqlite3.Error:
+    except sqlite3.Error as error:
         # database already exists or some other error occurred
-        print("Database BirdSites.db not created.")
+        print(error,"Database BirdSites.db not created.")
 
     return
