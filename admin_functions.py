@@ -11,7 +11,8 @@ def load_locations_table():
     cur.execute("""
     INSERT INTO locations VALUES
         (1,'Cape May Bird Observatory', 'Cape May', 'New Jersey', 12345678, '', 'https://njaudubon.org/centers/cape-may-bird-observatory/',' ', ' '),
-        (2,'Magee Marsh', 'Ottawa', 'Ohio', 87654321, '', 'https://www.mageemarsh.org/',' ', ' ')
+        (2,'Magee Marsh', 'Ottawa', 'Ohio', 87654321, '', 'https://www.mageemarsh.org/',' ', ' '),
+        (3,'Ottawa National Wildlife Refuge', 'Ottawa', 'Ohio', 899999, '', 'https://www.fws.gov/refuge/ottawa', ' ', ' ')
 """)
     con.commit()
     con.close()
