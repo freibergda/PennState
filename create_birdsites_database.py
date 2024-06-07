@@ -9,7 +9,8 @@ def create_birdsites():
     database_name = "BirdSites.db"
 
     try:
-        conn = sqlite3.connect(database_name)
+        # conn = sqlite3.connect(database_name)
+        conn = sqlite3.connect("BirdSites.db")
         # Getting current date/time to confirm creation
         curr_datetime = datetime.now()
         print("Database ",database_name," created.",curr_datetime)

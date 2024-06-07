@@ -40,7 +40,8 @@ def main():
     try:
         # Making a connection between sqlite3
         # database and Python Program
-        conn = st.connection(database_name, type='sql')
+        # conn = st.connection("BirdSites.db", type="sql")
+        conn = sqlite3.connect("BirdSites.db")
 
         # If sqlite3 makes a connection with python
         # program then it will print "Connected to SQLite"
@@ -48,8 +49,7 @@ def main():
         print("Connected to ", database_name)
 
         # Getting all tables from sqlite_master
-        sql_query = """SELECT name FROM "+database_name + 
-        " WHERE type='table';"""
+        sql_query = """SELECT name FROM sqlite_master WHERE type='table';"""
 
         # Creating cursor object using connection object
         cursor = conn.cursor()
@@ -60,7 +60,7 @@ def main():
 
         # printing all tables list
         print(cursor.fetchall())
-
+       
     except sqlite3.Error as error:
         print("Failed to execute the above query", error)
 
@@ -68,11 +68,11 @@ def main():
 
         # Inside Finally Block, If connection is
         # open, we need to close it
-        if conn:
+        #if conn:
 
             # using close() method, we will close
             # the connection
-            conn.close()
+            #conn.close()
 
             # After closing connection object, we
             # will print "the sqlite connection is
