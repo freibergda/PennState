@@ -1,8 +1,9 @@
 '''This modules tests the admin functions.py'''
 import sqlite3
+from datetime import datetime
 import streamlit as st
 import create_birdsites_database
-#import make_locations_table
+# import make_locations_table
 
 
 def load_locations_table():
@@ -38,15 +39,14 @@ def main():
     # Create the SQL connection as specified in the /.streamlit/secrets.toml file.
 
     try:
-        # Making a connection between sqlite3
-        # database and Python Program
-        # conn = st.connection("BirdSites.db", type="sql")
+        # Making a connection between sqlite3 database and Python Program
         conn = sqlite3.connect("BirdSites.db")
 
         # If sqlite3 makes a connection with python
         # program then it will print "Connected to SQLite"
         # Otherwise it will show errors
-        print("Connected to ", database_name)
+        curr_datetime = datetime.now()
+        print("Connected to ", database_name, " at: ", curr_datetime)
 
         # Getting all tables from sqlite_master
         sql_query = """SELECT name FROM sqlite_master WHERE type='table';"""
@@ -56,28 +56,23 @@ def main():
 
         # executing our sql query
         cursor.execute(sql_query)
-        print("List of tables\n")
 
-        # printing all tables list
-        print(cursor.fetchall())
-       
+        # send it to streamlit
+        st.write("List of tables\n")
+
+        # printing a list of all current tables
+        list_tables = (cursor.fetchall())
+
+        # send it to streamlit
+        st.dataframe(list_tables)
+
+        # close the connection
+        conn.close()
+        curr_datetime = datetime.now()
+        print("the sqlite connection is closed", curr_datetime)
+
     except sqlite3.Error as error:
         print("Failed to execute the above query", error)
-
-    finally:
-
-        # Inside Finally Block, If connection is
-        # open, we need to close it
-        #if conn:
-
-            # using close() method, we will close
-            # the connection
-            #conn.close()
-
-            # After closing connection object, we
-            # will print "the sqlite connection is
-            # closed"
-            print("the sqlite connection is closed")
 
     # st.dataframe(locations)
     # if starting from blank, there should be no locations table
