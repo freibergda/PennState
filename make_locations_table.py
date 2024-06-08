@@ -1,7 +1,6 @@
 '''This module will create and test the locations table in the BirdSites database'''
 import sqlite3
 
-
 def make_locations_table():
     '''this module creates the locations table'''
     # call sqlite3
@@ -13,11 +12,10 @@ def make_locations_table():
                     linkToNWSSite TEXT, linkToParkWebSite TEXT, linkToeBirdSite TEXT,\
                     linkToBirdCastSite TEXT)")
         con.commit()
-
+        con.close()
+        print("The SQLite connection is closed")
+        
     except sqlite3.Error as error:
         print("Error while connecting to SQLite", error)
-    finally:
-        if con:
-            con.close()
-            print("The SQLite connection is closed")
+
     return

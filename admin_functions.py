@@ -3,8 +3,7 @@ import sqlite3
 from datetime import datetime
 import streamlit as st
 import create_birdsites_database
-# import make_locations_table
-
+import make_locations_table
 
 def load_locations_table():
     '''Put the data into the database (mimic the adminstrator)'''
@@ -19,12 +18,11 @@ def load_locations_table():
     con.commit()
     con.close()
 
-
 def main():
     '''this is the main module, which will test the admin functions'''
     database_name = create_birdsites_database.create_birdsites()
 
-    # make_locations_table.make_locations_table()
+    make_locations_table.make_locations_table()
 
     # mimic the administrator by loading the locations table
     # load_locations_table()
@@ -33,14 +31,13 @@ def main():
     # Set page variables
     st.set_page_config(layout="wide")
     st.title("BirdSites Database")
-    st.title("Locations Table")
 
     # The following sets up a connection to BirdSites_db using a SQLAlchemy Engine
     # Create the SQL connection as specified in the /.streamlit/secrets.toml file.
 
     try:
         # Making a connection between sqlite3 database and Python Program
-        conn = sqlite3.connect("BirdSites.db")
+        conn = sqlite3.connect(database_name)
 
         # If sqlite3 makes a connection with python
         # program then it will print "Connected to SQLite"
@@ -74,6 +71,7 @@ def main():
     except sqlite3.Error as error:
         print("Failed to execute the above query", error)
 
+    #st.title("Locations Table")
     # st.dataframe(locations)
     # if starting from blank, there should be no locations table
 
@@ -82,7 +80,6 @@ def main():
     # con.execute("DROP TABLE locations")
     # con.commit()
     # con.close()
-
 
 if __name__ == "__main__":
     main()
