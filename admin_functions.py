@@ -4,6 +4,8 @@ from datetime import datetime
 import streamlit as st
 import create_birdsites_database
 import make_locations_table
+import make_groups_table
+
 
 def load_locations_table():
     '''Put the data into the database (mimic the adminstrator)'''
@@ -18,11 +20,16 @@ def load_locations_table():
     con.commit()
     con.close()
 
+
 def main():
     '''this is the main module, which will test the admin functions'''
     database_name = create_birdsites_database.create_birdsites()
 
-    make_locations_table.make_locations_table()
+    # create all database tables
+
+    make_locations_table.make_locations_table(database_name)
+
+    make_groups_table.make_groups_table(database_name)
 
     # mimic the administrator by loading the locations table
     # load_locations_table()
@@ -45,7 +52,7 @@ def main():
         curr_datetime = datetime.now()
         print("Connected to ", database_name, " at: ", curr_datetime)
 
-        # Getting all tables from sqlite_master
+        # Getting a list of all tables from sqlite_master
         sql_query = """SELECT name FROM sqlite_master WHERE type='table';"""
 
         # Creating cursor object using connection object
@@ -71,7 +78,7 @@ def main():
     except sqlite3.Error as error:
         print("Failed to execute the above query", error)
 
-    #st.title("Locations Table")
+    # st.title("Locations Table")
     # st.dataframe(locations)
     # if starting from blank, there should be no locations table
 
@@ -80,6 +87,7 @@ def main():
     # con.execute("DROP TABLE locations")
     # con.commit()
     # con.close()
+
 
 if __name__ == "__main__":
     main()
