@@ -5,6 +5,7 @@ import streamlit as st
 import create_birdsites_database
 import make_locations_table
 import make_groups_table
+import make_locations_groups_table
 
 
 def load_locations_table():
@@ -31,6 +32,8 @@ def main():
 
     make_groups_table.make_groups_table(database_name)
 
+    make_locations_groups_table.make_locations_groups_table(database_name)
+
     # mimic the administrator by loading the locations table
     # load_locations_table()
 
@@ -39,9 +42,7 @@ def main():
     st.set_page_config(layout="wide")
     st.title("BirdSites Database")
 
-    # The following sets up a connection to BirdSites_db using a SQLAlchemy Engine
-    # Create the SQL connection as specified in the /.streamlit/secrets.toml file.
-
+    # open the sqlite3 database
     try:
         # Making a connection between sqlite3 database and Python Program
         conn = sqlite3.connect(database_name)
@@ -52,8 +53,12 @@ def main():
         curr_datetime = datetime.now()
         print("Connected to ", database_name, " at: ", curr_datetime)
 
-        # Getting a list of all tables from sqlite_master
-        sql_query = """SELECT name FROM sqlite_master WHERE type='table';"""
+        # Getting a list of all tables from sqlite_schema, don't include sqlite internal tables
+        # https://database.guide/2-ways-to-list-tables-in-sqlite-database/
+        sql_query = """SELECT name FROM sqlite_schema 
+                    WHERE type = ('table') 
+                    AND name NOT LIKE 'sqlite_%'
+                    ORDER BY name;"""
 
         # Creating cursor object using connection object
         cursor = conn.cursor()
@@ -68,12 +73,16 @@ def main():
         list_tables = (cursor.fetchall())
 
         # send it to streamlit
-        st.dataframe(list_tables)
+        # add header
+        # (https://docs.streamlit.io/develop/api-reference/data/st.dataframe)
+        st.dataframe(list_tables,
+            column_config={ "name": "Table Name"}
+            )
 
         # close the connection
         conn.close()
         curr_datetime = datetime.now()
-        print("the sqlite connection is closed", curr_datetime)
+        print("the sqlite connection for admin functions is closed at:", curr_datetime)
 
     except sqlite3.Error as error:
         print("Failed to execute the above query", error)
