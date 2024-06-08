@@ -26,6 +26,9 @@ def main():
     '''this is the main module, which will test the admin functions'''
     database_name = create_birdsites_database.create_birdsites()
 
+    # create the administrator listing table
+    
+    
     # create all database tables
 
     make_locations_table.make_locations_table(database_name)
@@ -38,6 +41,7 @@ def main():
     # load_locations_table()
 
     # Display the locations table (static, final will be dynamic so that Administrator can create or edit)
+    
     # Set page variables
     st.set_page_config(layout="wide")
     st.title("BirdSites Database")
@@ -67,18 +71,19 @@ def main():
         cursor.execute(sql_query)
 
         # send it to streamlit
-        st.write("List of tables\n")
+        st.header("List of tables\n")
 
         # printing a list of all current tables
         list_tables = (cursor.fetchall())
-
+        # testing what it looks like in print
+        print(list_tables)
         # send it to streamlit
         # add header
-        # (https://docs.streamlit.io/develop/api-reference/data/st.dataframe)
-        st.dataframe(list_tables,
-            column_config={ "name": "Table Name"}
-            )
-
+        # https://docs.streamlit.io/develop/api-reference/data/st.table
+        #st.table(list_tables) - this works but has index on both sides 
+        #st.write(list_tables) - that didn't work (list type from db)
+        # https://docs.streamlit.io/develop/concepts/design/dataframes
+        st.dataframe(list_tables) # this also works and has only top blank
         # close the connection
         conn.close()
         curr_datetime = datetime.now()
