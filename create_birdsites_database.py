@@ -1,4 +1,4 @@
-'''This module creates the BirdSites database'''
+'''Jira S8S4-70 This module creates the BirdSites database'''
 
 import sqlite3
 from datetime import datetime

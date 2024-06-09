@@ -1,4 +1,4 @@
-'''This module will create the locations_groups table in the BirdSites database '''
+'''Jira S8S4-17 This module will create the locations_groups table in the BirdSites database '''
 import sqlite3
 from datetime import datetime
 

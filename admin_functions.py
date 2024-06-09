@@ -6,7 +6,7 @@ import create_birdsites_database
 import make_locations_table
 import make_groups_table
 import make_locations_groups_table
-
+import display_birdsites_database_tables
 
 def load_locations_table():
     '''Put the data into the database (mimic the adminstrator)'''
@@ -29,7 +29,7 @@ def main():
     # create the administrator listing table
     
     
-    # create all database tables
+    # create all user data tables
 
     make_locations_table.make_locations_table(database_name)
 
@@ -37,60 +37,18 @@ def main():
 
     make_locations_groups_table.make_locations_groups_table(database_name)
 
+    # Set page variables
+    st.set_page_config(layout="wide")
+    st.title("BirdSites Database")
+
+    # display the list of all tables in the database 
+    display_birdsites_database_tables.display_all_tables(database_name)    
+
     # mimic the administrator by loading the locations table
     # load_locations_table()
 
     # Display the locations table (static, final will be dynamic so that Administrator can create or edit)
     
-    # Set page variables
-    st.set_page_config(layout="wide")
-    st.title("BirdSites Database")
-
-    # open the sqlite3 database
-    try:
-        # Making a connection between sqlite3 database and Python Program
-        conn = sqlite3.connect(database_name)
-
-        # If sqlite3 makes a connection with python
-        # program then it will print "Connected to SQLite"
-        # Otherwise it will show errors
-        curr_datetime = datetime.now()
-        print("Connected to ", database_name, " at: ", curr_datetime)
-
-        # Getting a list of all tables from sqlite_schema, don't include sqlite internal tables
-        # https://database.guide/2-ways-to-list-tables-in-sqlite-database/
-        sql_query = """SELECT name FROM sqlite_schema 
-                    WHERE type = ('table') 
-                    AND name NOT LIKE 'sqlite_%'
-                    ORDER BY name;"""
-
-        # Creating cursor object using connection object
-        cursor = conn.cursor()
-
-        # executing our sql query
-        cursor.execute(sql_query)
-
-        # send it to streamlit
-        st.header("List of tables\n")
-
-        # printing a list of all current tables
-        list_tables = (cursor.fetchall())
-        # testing what it looks like in print
-        print(list_tables)
-        # send it to streamlit
-        # add header
-        # https://docs.streamlit.io/develop/api-reference/data/st.table
-        #st.table(list_tables) - this works but has index on both sides 
-        #st.write(list_tables) - that didn't work (list type from db)
-        # https://docs.streamlit.io/develop/concepts/design/dataframes
-        st.dataframe(list_tables) # this also works and has only top blank
-        # close the connection
-        conn.close()
-        curr_datetime = datetime.now()
-        print("the sqlite connection for admin functions is closed at:", curr_datetime)
-
-    except sqlite3.Error as error:
-        print("Failed to execute the above query", error)
 
     # st.title("Locations Table")
     # st.dataframe(locations)

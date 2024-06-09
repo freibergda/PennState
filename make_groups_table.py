@@ -1,7 +1,6 @@
-'''This module will create the groups table in the BirdSites database '''
+'''Jira S8S4-49 This module will create the groups table in the BirdSites database '''
 import sqlite3
 from datetime import datetime
-
 
 def make_groups_table(database_name):
     '''this module creates the groups table'''

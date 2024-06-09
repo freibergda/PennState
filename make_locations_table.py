@@ -1,4 +1,4 @@
-'''This module will create the locations table in the BirdSites database'''
+'''Jira S8S4-15 This module will create the locations table in the BirdSites database'''
 import sqlite3
 from datetime import datetime
 
