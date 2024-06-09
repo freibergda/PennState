@@ -1,10 +1,26 @@
-'''Jira S8S4-49 This module will create the groups table in the BirdSites database '''
+'''Jira Task S8S4-49 User Story: As an Administrator, I want the system to create a table called 
+the Groups table in the BirdSites database, so that every record in the table 
+will contain the following columns:
+a. groups table primary key
+b. spring migration
+c. fall migration
+d. summer
+e. winter
+f. Atlantic flyway
+g. Pacific flyway 
+Acceptance Criteria
+Given:  the BirdSites.db database exists and the Groups table does not exist
+When:  the system runs the make_groups_table function
+Then: the Groups table has been created in the  BirdSites.db database 
+variables: database_name
+parameters: none'''
+
 import sqlite3
 from datetime import datetime
 
 def make_groups_table(database_name):
-    '''this module creates the groups table'''
-    # call sqlite3
+    '''This module will create the groups table in the BirdSites database'''
+    # call sqlite3 and attempt to create table
     try:
 
         con = sqlite3.connect(database_name)
