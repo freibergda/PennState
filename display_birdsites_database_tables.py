@@ -33,6 +33,7 @@ def display_all_tables(database_name):
             tables = conn.execute("SELECT name FROM sqlite_master WHERE type='table';")
             for table in tables.fetchall():
                 table_names.append(table[0])
+            print(table_names)
             return table_names
 
         def get_column_names(conn, table_name):
@@ -41,6 +42,7 @@ def display_all_tables(database_name):
             columns = conn.execute(f"PRAGMA table_info('{table_name}');").fetchall()
             for col in columns:
                 column_names.append(col[1])
+            print(column_names)
             return column_names
 
         def get_database_info(conn):
@@ -49,6 +51,7 @@ def display_all_tables(database_name):
             for table_name in get_table_names(conn):
                 columns_names = get_column_names(conn, table_name)
                 table_dicts.append({"table_name": table_name, "column_names": columns_names})
+            print(table_dicts)
             return table_dicts
         database_schema_dict = get_database_info(conn)
         database_schema_string = "\n".join(
@@ -57,7 +60,8 @@ def display_all_tables(database_name):
                 for table in database_schema_dict
             ]
         )
-
+        print(database_schema_dict) 
+        print(database_schema_string)
         ###############################################################
         
         # Set streamlit page variables
@@ -73,7 +77,8 @@ def display_all_tables(database_name):
 #        print(list_tables)
         # send it to streamlit
         # https://docs.streamlit.io/develop/concepts/design/dataframes
-        st.dataframe(list_tables)  # this also works and has only top blank
+        #st.dataframe(list_tables)  # this also works and has only top blank
+        st.dataframe(database_schema_string)
         # close the connection
         conn.close()
         curr_datetime = datetime.now()
