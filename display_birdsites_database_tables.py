@@ -24,19 +24,41 @@ def display_all_tables(database_name):
         # Otherwise it will show errors
         curr_datetime = datetime.now()
         print("Connected to ", database_name, " at: ", curr_datetime)
+        
+        ############################################################
+        #https://cookbook.openai.com/examples/how_to_call_functions_with_chat_models
+        def get_table_names(conn):
+            """Return a list of table names."""
+            table_names = []
+            tables = conn.execute("SELECT name FROM sqlite_master WHERE type='table';")
+            for table in tables.fetchall():
+                table_names.append(table[0])
+            return table_names
 
-        # Getting a list of all tables from sqlite_schema, don't include sqlite internal tables
-        # https://database.guide/2-ways-to-list-tables-in-sqlite-database/
-        sql_query = """SELECT name FROM sqlite_schema 
-                    WHERE type = ('table') 
-                    AND name NOT LIKE 'sqlite_%'
-                    ORDER BY name;"""
+        def get_column_names(conn, table_name):
+            """Return a list of column names."""
+            column_names = []
+            columns = conn.execute(f"PRAGMA table_info('{table_name}');").fetchall()
+            for col in columns:
+                column_names.append(col[1])
+            return column_names
 
-        # Creating cursor object using connection object
-        cursor = conn.cursor()
+        def get_database_info(conn):
+            """Return a list of dicts containing the table name and columns for each table in the database."""
+            table_dicts = []
+            for table_name in get_table_names(conn):
+                columns_names = get_column_names(conn, table_name)
+                table_dicts.append({"table_name": table_name, "column_names": columns_names})
+            return table_dicts
+        database_schema_dict = get_database_info(conn)
+        database_schema_string = "\n".join(
+            [
+                f"Table: {table['table_name']}\nColumns: {', '.join(table['column_names'])}"
+                for table in database_schema_dict
+            ]
+        )
 
-        # executing our sql query
-        cursor.execute(sql_query)
+        ###############################################################
         
         # Set streamlit page variables
         st.set_page_config(layout="wide")
@@ -46,9 +68,9 @@ def display_all_tables(database_name):
         st.header("List of tables\n")
 
         # printing a list of all current tables
-        list_tables = (cursor.fetchall())
+#        list_tables = (cursor.fetchall())
         # testing what it looks like in print
-        print(list_tables)
+#        print(list_tables)
         # send it to streamlit
         # https://docs.streamlit.io/develop/concepts/design/dataframes
         st.dataframe(list_tables)  # this also works and has only top blank
