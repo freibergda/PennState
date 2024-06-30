@@ -1,4 +1,4 @@
-'''menu.py'''
+'''menu.py  Jira Task S8S4-67'''
 import streamlit as st
 
 def authenticated_menu():
@@ -28,6 +28,6 @@ def menu():
 def menu_with_redirect():
     # Redirect users to the main page if not logged in, otherwise continue to
     # render the navigation menu
+    menu()
     if "role" not in st.session_state or st.session_state.role is None:
         st.switch_page("app.py")
-    menu()

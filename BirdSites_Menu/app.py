@@ -16,6 +16,7 @@ Variables: link to the locations where the code that displays
 the BirdSites database structure or the code that allows 
 the creating/modifying of records in the BirdSites database.'''
 
+# https://docs.streamlit.io/develop/tutorials/multipage/st.page_link-nav
 import streamlit as st
 from menu import menu
 
@@ -30,6 +31,8 @@ def set_role():
     # Callback function to save the role selection to Session State
     st.session_state.role = st.session_state._role
 
+st.title('BirdSites Database')
+
 # Selectbox to choose role
 st.selectbox(
     "Select your role:",
@@ -38,4 +41,4 @@ st.selectbox(
     on_change=set_role,
 )
 
-menu() # Render the dynamic menu
+menu()  # Render the dynamic menu
