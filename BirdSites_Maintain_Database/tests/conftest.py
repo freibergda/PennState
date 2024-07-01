@@ -1,3 +1,4 @@
+'''Jira Task S8S4-175 Test Suite for Sprint 2 Administrator Stories '''
 import os
 import pytest
 #from src.create_birdsites_database import create_birdsites

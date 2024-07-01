@@ -14,6 +14,7 @@ import pandas as pd
 def main():
     # Connect to the SQLite database
     conn = sqlite3.connect(r'C:\Users\freib\Desktop\PENN_STATE\SWENG_894_Capstone\BirdSites_Database\BirdSites.db')
+
     # Perform query and get data into a DataFrame
     query = "SELECT * FROM locations"
     df = pd.read_sql(query, conn)
