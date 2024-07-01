@@ -1,0 +1,20 @@
+>>>PYTHON-EXEC-OUTPUT
+Received JSON data in run script
+Running pytest with args: ['-p', 'vscode_pytest', '--rootdir=c:\\Users\\freib\\Desktop\\PENN_STATE\\SWENG_894_Capstone', 'c:\\Users\\freib\\Desktop\\PENN_STATE\\SWENG_894_Capstone\\BirdSites_Maintain_Database\\tests\\test_groups.py::test_groups_table_exist', 'c:\\Users\\freib\\Desktop\\PENN_STATE\\SWENG_894_Capstone\\BirdSites_Maintain_Database\\tests\\test_groups.py::test_groups_data_fetched', 'c:\\Users\\freib\\Desktop\\PENN_STATE\\SWENG_894_Capstone\\BirdSites_Maintain_Database\\tests\\test_locations.py::test_locations_table_exist', 'c:\\Users\\freib\\Desktop\\PENN_STATE\\SWENG_894_Capstone\\BirdSites_Maintain_Database\\tests\\test_locations.py::test_locations_data_fetched', 'c:\\Users\\freib\\Desktop\\PENN_STATE\\SWENG_894_Capstone\\BirdSites_Maintain_Database\\tests\\test_locations_groups.py::test_locations_groups_table_exist', 'c:\\Users\\freib\\Desktop\\PENN_STATE\\SWENG_894_Capstone\\BirdSites_Maintain_Database\\tests\\test_locations_groups.py::test_locations_groups_data_fetched']
+============================= test session starts =============================
+platform win32 -- Python 3.11.9, pytest-8.2.2, pluggy-1.5.0 -- C:\Users\freib\anaconda3\envs\streamlitenv\python.exe
+cachedir: .pytest_cache
+rootdir: c:\Users\freib\Desktop\PENN_STATE\SWENG_894_Capstone
+configfile: BirdSites_Maintain_Database\pytest.ini
+collecting ... collected 6 items
+
+BirdSites_Maintain_Database/tests/test_groups.py::test_groups_table_exist PASSED [ 16%]
+BirdSites_Maintain_Database/tests/test_groups.py::test_groups_data_fetched PASSED [ 33%]
+BirdSites_Maintain_Database/tests/test_locations.py::test_locations_table_exist PASSED [ 50%]
+BirdSites_Maintain_Database/tests/test_locations.py::test_locations_data_fetched PASSED [ 66%]
+BirdSites_Maintain_Database/tests/test_locations_groups.py::test_locations_groups_table_exist PASSED [ 83%]
+BirdSites_Maintain_Database/tests/test_locations_groups.py::test_locations_groups_data_fetched PASSED [100%]
+
+============================== 6 passed in 2.31s ==============================
+<<<PYTHON-EXEC-OUTPUT
+Finished running tests!
