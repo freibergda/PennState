@@ -47,6 +47,8 @@ def location_group_records():
 
 def administrator_menu():
     ''' Show a navigation menu for authenticated users'''
+    st.markdown(
+    f"You are currently logged in with the role of {st.session_state.role}.")
     task = st.sidebar.selectbox("Select a task", [
         "Display Database Structure",
         "Create/modify Location Records",
@@ -65,13 +67,11 @@ def administrator_menu():
 
 menu_with_redirect()
 
-if st.session_state.role not in ["admin", "super-admin"]:
+if st.session_state.role not in ["admin"]:
+    st.title("This page is only available to admins")
+    st.markdown(
+    f"You are currently logged in with the role of {st.session_state.role}.")
     st.warning("You do not have permission to view this page.")
     st.stop()
-
-st.title("This page is only available to admins and super-admins")
-st.markdown(
-    f"You are currently logged in with the role of {st.session_state.role}."
-)
 
 administrator_menu()

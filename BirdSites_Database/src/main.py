@@ -13,7 +13,6 @@ Variables: none
 Parameters: none'''
 
 import streamlit as st
-#from display_birdsites_database_tables import display_all_tables
 import display_birdsites_database_tables
 import create_birdsites_database
 import make_admin_table
@@ -24,7 +23,7 @@ import make_locations_groups_table
 st.title('BirdSites Database')
 
 def main():
-    database_name = "BirdSites.db"
+    database_name = r"C:\Users\freib\Desktop\PENN_STATE\SWENG_894_Capstone\BirdSites_Database\BirdSites.db"
     create_birdsites_database.create_birdsites(database_name)
     make_admin_table.make_admin_table(database_name)
     make_locations_table.make_locations_table(database_name)

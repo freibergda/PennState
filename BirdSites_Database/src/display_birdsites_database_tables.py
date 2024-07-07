@@ -12,24 +12,23 @@ import sqlite3
 def display_all_tables(database_name):
     conn = sqlite3.connect(database_name)
     cursor = conn.cursor()
-    
+
     tables = cursor.execute("SELECT name FROM sqlite_master WHERE type='table';").fetchall()
-    
+
     result = []
     for table_name in tables:
         table_name = table_name[0]
         columns = cursor.execute(f"PRAGMA table_info({table_name});").fetchall()
         columns = [col[1] for col in columns]
         result.append((table_name, columns))
-    
+
     conn.close()
-    
+
     return result
 
 if __name__ == "__main__":
-    database_name = "BirdSites.db"
+    database_name = r"C:\Users\freib\Desktop\PENN_STATE\SWENG_894_Capstone\BirdSites_Database\BirdSites.db"
     output = display_all_tables(database_name)
-    
     print(output)
 
     ############################################################

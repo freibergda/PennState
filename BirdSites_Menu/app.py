@@ -4,7 +4,9 @@ to either view the BirdSites database structure or
 create/modify records in the BirdSites database.  
 Unit Tests: 
 System Test:
-Acceptance Criteria:  to be written
+Acceptance Criteria:  The menus function correctly and 
+either display the database structure or allow the 
+administrator to create or modify records.
 Given:  The BirdSites database exists, has tables loaded 
 and the individual has an admin login.
 When:  The menu app is activated and admin functions are 
@@ -27,18 +29,12 @@ if "role" not in st.session_state:
 # Retrieve the role from Session State to initialize the widget
 st.session_state._role = st.session_state.role
 
+
 def set_role():
     # Callback function to save the role selection to Session State
     st.session_state.role = st.session_state._role
 
-st.title('BirdSites Database')
 
-# Selectbox to choose role
-st.selectbox(
-    "Select your role:",
-    ["None", "user", "admin", "super-admin"],
-    key="_role",
-    on_change=set_role,
-)
+st.title('BirdSites Database')
 
 menu()  # Render the dynamic menu

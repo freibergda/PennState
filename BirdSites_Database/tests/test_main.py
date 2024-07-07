@@ -1,5 +1,5 @@
 # test_main.py
-from src.display_birdsites_database_tables import display_all_tables
+from BirdSites_Database.src.display_birdsites_database_tables import display_all_tables
 
 def main():
     import streamlit as st

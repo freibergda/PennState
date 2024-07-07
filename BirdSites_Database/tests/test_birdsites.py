@@ -1,11 +1,11 @@
 import sqlite3
 import os
 import pytest
-from src.create_birdsites_database import create_birdsites
-from src.make_admin_table import make_admin_table
-from src.make_locations_table import make_locations_table
-from src.make_groups_table import make_groups_table
-from src.make_locations_groups_table import make_locations_groups_table
+from BirdSites_Database.src.create_birdsites_database import create_birdsites
+from BirdSites_Database.src.make_admin_table import make_admin_table
+from BirdSites_Database.src.make_locations_table import make_locations_table
+from BirdSites_Database.src.make_groups_table import make_groups_table
+from BirdSites_Database.src.make_locations_groups_table import make_locations_groups_table
 
 @pytest.fixture(scope="module")
 def setup_database():
