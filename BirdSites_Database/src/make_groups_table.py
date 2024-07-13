@@ -7,7 +7,8 @@ c. fall migration
 d. summer
 e. winter
 f. Atlantic flyway
-g. Pacific flyway 
+g. Central flyway
+h. Pacific flyway 
 Acceptance Criteria
 Given:  the BirdSites.db database exists and the Groups table does not exist
 When:  the system runs the make_groups_table function
@@ -27,6 +28,12 @@ def make_groups_table(database_name):
                       summer TEXT,
                       winter TEXT,
                       atlantic_flyway,
+                      central_flyway,
                       pacific_flyway)''')
+    
+    # Add central_flyway column to groups table
+    #new_column = "ALTER TABLE groups ADD COLUMN central_flyway"
+
+    #cursor.execute(new_column)
     conn.commit()
     conn.close()

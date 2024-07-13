@@ -1,14 +1,41 @@
-'''menu.py  Jira Task S8S4-67'''
+'''Jira Task S8S4-67 User Story:  As an Administrator, I want to either view the BirdSites 
+database structure or create/modify records in the BirdSites database.  
+Unit Tests: 
+System Test:
+Acceptance Criteria:  to be written
+Given:  The BirdSites database exists, has tables loaded and the individual 
+has an admin login.
+When:  The menu app is activated and admin functions are selected.
+Then:  The administrator is presented with the choice of either seeing 
+the display of the BirdSites database structure or of creating/modifying 
+records in the BirdSites database.
+Variables: link to the locations where the code that displays the BirdSites 
+database structure or the code that allows the creating/modifying of 
+records in the BirdSites database.
+Parameters: none 
+
+Jira Task S8S4-4 User Story:  As an Administrator, I want to create or modify an administrator 
+access the secrets file in the system .streamlit folder to grant 
+myself or others Administrator access.
+Acceptance Criteria
+Given: the BirdSites.db database exists with a system folder called .streamlit
+When: an administrator enters a login and password into the .streamlit/secrets file
+Then: a record has been created or modified in the .streamlit/secrets file
+variables: database_name = BirdSites.db
+parameters: none'''
+
 import streamlit as st
 # https://docs.streamlit.io/knowledge-base/deploy/authentication-without-sso
 # https://www.geeksforgeeks.org/what-is-hmachash-based-message-authentication-code/
 
 import hmac
 
+
 def authenticated_menu():
     # Show a navigation menu for authenticated users
     st.sidebar.page_link("pages/admin.py", label="Database Administrator")
     st.sidebar.page_link("pages/user.py", label="User")
+
 
 def unauthenticated_menu():
     '''Show a navigation menu for unauthenticated users'''
@@ -32,7 +59,8 @@ def unauthenticated_menu():
                     st.secrets.passwords[st.session_state["username"]],
                 ):
                     st.session_state["password_correct"] = True
-                    del st.session_state["password"]  # Don't store the username or password.
+                    # Don't store the username or password.
+                    del st.session_state["password"]
                     del st.session_state["username"]
                 else:
                     st.session_state["password_correct"] = False
@@ -48,13 +76,14 @@ def unauthenticated_menu():
             # Show inputs for username + password.
             login_form()
             if "password_correct" in st.session_state:
-                #st.error("User not known or password incorrect")
-                st.session_state.role = "user"              
+                # st.error("User not known or password incorrect")
+                st.session_state.role = "user"
                 return False
 
         if not check_password():
             st.stop()
-    
+
+
 def menu():
     '''Determine if a user is logged in or not, then show the correct
     navigation menu'''
@@ -62,6 +91,7 @@ def menu():
         unauthenticated_menu()
         return
     authenticated_menu()
+
 
 def menu_with_redirect():
     '''Redirect users to the main page if not logged in, otherwise continue to
