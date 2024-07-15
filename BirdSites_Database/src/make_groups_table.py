@@ -30,10 +30,6 @@ def make_groups_table(database_name):
                       atlantic_flyway,
                       central_flyway,
                       pacific_flyway)''')
-    
-    # Add central_flyway column to groups table
-    #new_column = "ALTER TABLE groups ADD COLUMN central_flyway"
 
-    #cursor.execute(new_column)
     conn.commit()
     conn.close()
