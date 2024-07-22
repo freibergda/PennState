@@ -1,0 +1,77 @@
+
+				Jira Task S8S4-167
+Test ID: S8S4-167-1
+Description: Ensure all tables are created successfully.
+Result: Passed
+Timestamp: 2024-07-21 20:58:09.607296
+--------------------------------------------------
+Test ID: S8S4-167-2
+Description: Ensure 'administrator_records' table has correct columns.
+Result: Passed
+Timestamp: 2024-07-21 20:58:09.607296
+--------------------------------------------------
+Test ID: S8S4-167-3
+Description: Intentionally failing test to check non-existing table.
+Result: Failed
+Timestamp: 2024-07-21 20:58:09.630642
+--------------------------------------------------
+Test ID: S8S4-167-4
+Description: Ensure 'administrator_records' table is created successfully.
+Result: Passed
+Timestamp: 2024-07-21 20:58:09.638631
+--------------------------------------------------
+Test ID: S8S4-167-5
+Description: Ensure 'administrator_records' table has correct columns.
+Result: Passed
+Timestamp: 2024-07-21 20:58:09.648888
+--------------------------------------------------
+Test ID: S8S4-167-6
+Description: Intentionally failing test to check non-existing table.
+Result: Failed
+Timestamp: 2024-07-21 20:58:09.655568
+--------------------------------------------------
+Test ID: S8S4-167-7
+Description: Ensure 'groups' table is created successfully.
+Result: Passed
+Timestamp: 2024-07-21 20:58:09.664070
+--------------------------------------------------
+Test ID: S8S4-167-8
+Description: Ensure 'groups' table has correct columns.
+Result: Passed
+Timestamp: 2024-07-21 20:58:09.669487
+--------------------------------------------------
+Test ID: S8S4-167-9
+Description: Intentionally failing test to check non-existing table.
+Result: Failed
+Timestamp: 2024-07-21 20:58:09.674036
+--------------------------------------------------
+Test ID: S8S4-167-10
+Description: Ensure 'locations_groups' table is created successfully.
+Result: Passed
+Timestamp: 2024-07-21 20:58:09.682690
+--------------------------------------------------
+Test ID: S8S4-167-11
+Description: Ensure 'locations_groups' table has correct columns.
+Result: Passed
+Timestamp: 2024-07-21 20:58:09.688417
+--------------------------------------------------
+Test ID: S8S4-167-12
+Description: Intentionally failing test to check non-existing table.
+Result: Failed
+Timestamp: 2024-07-21 20:58:09.695628
+--------------------------------------------------
+Test ID: S8S4-167-13
+Description: Ensure 'locations' table is created successfully.
+Result: Passed
+Timestamp: 2024-07-21 20:58:09.701419
+--------------------------------------------------
+Test ID: S8S4-167-14
+Description: Ensure 'locations' table has correct columns.
+Result: Passed
+Timestamp: 2024-07-21 20:58:09.704439
+--------------------------------------------------
+Test ID: S8S4-167-15
+Description: Intentionally failing test to check non-existing table.
+Result: Failed
+Timestamp: 2024-07-21 20:58:09.714420
+--------------------------------------------------

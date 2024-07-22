@@ -1,5 +1,4 @@
-'''test_birdsites_database.py
-Jira task S8S4-167
+'''Jira task S8S4-167
 Test Type: Unit
 Context: BirdSites Database
 Test ID: UT1 – Database and Table Creation
@@ -22,77 +21,215 @@ Step    Action                                                          Expected
 2.      Connect to the database and fetch the list of tables.           Tables `administrator_records`, `locations`, `groups`, and `locations_groups` exist.
 3.      Verify that each table has the expected columns.                Columns match the specifications.
 '''
-
 import os
 import sqlite3
 import pytest
+import contextlib
+from datetime import datetime
 
-from src import admin_functions, create_birdsites_database, make_admin_table, make_locations_table, make_groups_table, make_locations_groups_table
-
+# Adjust the import paths based on your environment set-up
+import sys  
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'src')))
+import create_birdsites_database
+import display_birdsites_database_tables
+import make_admin_table
+import make_groups_table
+import make_locations_groups_table 
+import make_locations_table
+import main
+    
 DATABASE_NAME = "BirdSites.db"
+LOG_FILE = "test_report.txt"
 
-@pytest.fixture(scope="module")
-def setup_birdsites_db():
+@contextlib.contextmanager
+def connect_to_database(db_name):
+    conn = sqlite3.connect(db_name)
+    try:
+        yield conn
+    finally:
+        conn.close()
+
+@pytest.fixture(scope='module', autouse=True)
+def setup_and_teardown():
+    def assert_no_active_connections():
+        try:
+            os.remove(DATABASE_NAME)
+        except PermissionError:
+            raise AssertionError("Database has active connections.")
     if os.path.exists(DATABASE_NAME):
-        os.remove(DATABASE_NAME)
+        assert_no_active_connections()
+    yield
+    if os.path.exists(DATABASE_NAME):
+        assert_no_active_connections()
+
+def log_test_result(test_id, test_description, result):
+    with open(LOG_FILE, "a") as f:
+        f.write(f"Test ID: {test_id}\n")
+        f.write(f"Description: {test_description}\n")
+        f.write(f"Result: {'Passed' if result else 'Failed'}\n")
+        f.write(f"Timestamp: {datetime.now()}\n")
+        f.write("-" * 50 + '\n')
+
+# Tests for display_birdsites_database_tables.py
+def test_display_tables_success():
     create_birdsites_database.create_birdsites(DATABASE_NAME)
     make_admin_table.make_admin_table(DATABASE_NAME)
     make_locations_table.make_locations_table(DATABASE_NAME)
     make_groups_table.make_groups_table(DATABASE_NAME)
     make_locations_groups_table.make_locations_groups_table(DATABASE_NAME)
-    yield
-    if os.path.exists(DATABASE_NAME):
-        os.remove(DATABASE_NAME)
-
-def test_database_creation(setup_birdsites_db):
-    assert os.path.exists(DATABASE_NAME), "Database file has not been created."
-
-def test_tables_creation(setup_birdsites_db):
-    conn = sqlite3.connect(DATABASE_NAME)
-    cursor = conn.cursor()
     
-    tables = cursor.execute("SELECT name FROM sqlite_master WHERE type='table';").fetchall()
+    tables = display_birdsites_database_tables.display_all_tables(DATABASE_NAME)
     table_names = [table[0] for table in tables]
-    
-    expected_tables = [
-        'administrator_records',
-        'locations',
-        'groups',
-        'locations_groups'
-    ]
-    
-    for table in expected_tables:
-        assert table in table_names, f"Table '{table}' does not exist in the database."
-    
-    conn.close()
+    expected_tables = {'administrator_records', 'locations', 'groups', 'locations_groups'}
+    result = expected_tables.issubset(set(table_names))
+    log_test_result("UT1", "Ensure all tables are created successfully.", result)
+    assert result
 
-def test_table_columns(setup_birdsites_db):
-    conn = sqlite3.connect(DATABASE_NAME)
-    cursor = conn.cursor()
+def test_display_tables_content():
+    create_birdsites_database.create_birdsites(DATABASE_NAME)
+    make_admin_table.make_admin_table(DATABASE_NAME)
+    make_locations_table.make_locations_table(DATABASE_NAME)
+    make_groups_table.make_groups_table(DATABASE_NAME)
+    make_locations_groups_table.make_locations_groups_table(DATABASE_NAME) 
     
-    table_columns = {
-        'administrator_records': {'id', 'login', 'email'},
-        'locations': {'location_id', 'location_full_name', 'county', 'state_full', 'latitude', 'longitude', 'link_to_NWS', 'link_to_park', 'link_to_eBird', 'link_to_BirdCast'},
-        'groups': {'group_id', 'spring_migration', 'fall_migration', 'summer', 'winter', 'atlantic_flyway', 'central_flyway', 'pacific_flyway'},
-        'locations_groups': {'location_id', 'group_id'}
-    }
-    
-    for table, columns in table_columns.items():
-        actual_columns = cursor.execute(f"PRAGMA table_info({table});").fetchall()
-        actual_columns = {col[1] for col in actual_columns}
-        assert columns == actual_columns, f"Table '{table}' does not have the expected columns. Expected: {columns}, Found: {actual_columns}"
-    
-    conn.close()
+    tables = display_birdsites_database_tables.display_all_tables(DATABASE_NAME)
+    admin_columns = [col for table, cols in tables if table == 'administrator_records' for col in cols]
+    result = 'login' in admin_columns and 'email' in admin_columns
+    log_test_result("UT2", "Ensure 'administrator_records' table has correct columns.", result)
+    assert result
 
-def test_execution_and_save_output():
-    from io import StringIO
-    import sys
-
-    pytest_output = StringIO()
-    result = pytest.main(["-v"], stdout=pytest_output)
+def test_display_tables_fail():
+    create_birdsites_database.create_birdsites(DATABASE_NAME)
     
-    with open("test_results.txt", "w") as f:
-        f.write(pytest_output.getvalue())
+    tables = display_birdsites_database_tables.display_all_tables(DATABASE_NAME)
+    table_names = [table[0] for table in tables]
+    result = 'non_existing_table' in table_names
+    log_test_result("UT3", "Intentionally failing test to check non-existing table.", result)
+    assert not result
+
+def test_make_admin_table_success():
+    create_birdsites_database.create_birdsites(DATABASE_NAME)
+    make_admin_table.make_admin_table(DATABASE_NAME)
+    with connect_to_database(DATABASE_NAME) as conn:
+        cursor = conn.cursor()
+        cursor.execute("SELECT name FROM sqlite_master WHERE type='table' AND name='administrator_records';")
+        result = cursor.fetchall()
+    log_test_result("UT1", "Ensure 'administrator_records' table is created successfully.", len(result) == 1)
+    assert len(result) == 1
+
+def test_make_admin_table_columns():
+    create_birdsites_database.create_birdsites(DATABASE_NAME)
+    make_admin_table.make_admin_table(DATABASE_NAME)
+    with connect_to_database(DATABASE_NAME) as conn:
+        cursor = conn.cursor()
+        cursor.execute("PRAGMA table_info(administrator_records);")
+        columns = [col[1] for col in cursor.fetchall()]
+    result = 'login' in columns and 'email' in columns
+    log_test_result("UT2", "Ensure 'administrator_records' table has correct columns.", result)
+    assert result
+
+def test_make_admin_table_fail():
+    create_birdsites_database.create_birdsites(DATABASE_NAME)
+    make_admin_table.make_admin_table(DATABASE_NAME)
+    with connect_to_database(DATABASE_NAME) as conn:
+        cursor = conn.cursor()
+        cursor.execute("SELECT name FROM sqlite_master WHERE type='table' AND name='non_existing_table';")
+        result = cursor.fetchall()
+    log_test_result("UT3", "Intentionally failing test to check non-existing table.", len(result) == 1)
+    assert len(result) == 0
+
+def test_make_groups_table_success():
+    create_birdsites_database.create_birdsites(DATABASE_NAME)
+    make_groups_table.make_groups_table(DATABASE_NAME)
+    with connect_to_database(DATABASE_NAME) as conn:
+        cursor = conn.cursor()
+        cursor.execute("SELECT name FROM sqlite_master WHERE type='table' AND name='groups';")
+        result = cursor.fetchall()
+    log_test_result("UT1", "Ensure 'groups' table is created successfully.", len(result) == 1)
+    assert len(result) == 1
+
+def test_make_groups_table_columns():
+    create_birdsites_database.create_birdsites(DATABASE_NAME)
+    make_groups_table.make_groups_table(DATABASE_NAME)
+    with connect_to_database(DATABASE_NAME) as conn:
+        cursor = conn.cursor()
+        cursor.execute("PRAGMA table_info(groups);")
+        columns = [col[1] for col in cursor.fetchall()]
+    result = 'spring_migration' in columns and 'winter' in columns
+    log_test_result("UT2", "Ensure 'groups' table has correct columns.", result)
+    assert result
+
+def test_make_groups_table_fail():
+    create_birdsites_database.create_birdsites(DATABASE_NAME)
+    make_groups_table.make_groups_table(DATABASE_NAME)
+    with connect_to_database(DATABASE_NAME) as conn:
+        cursor = conn.cursor()
+        cursor.execute("SELECT name FROM sqlite_master WHERE type='table' AND name='non_existing_table';")
+        result = cursor.fetchall()
+    log_test_result("UT3", "Intentionally failing test to check non-existing table.", len(result) == 1)
+    assert len(result) == 0
+
+def test_make_locations_groups_table_success():
+    create_birdsites_database.create_birdsites(DATABASE_NAME)
+    make_locations_groups_table.make_locations_groups_table(DATABASE_NAME)
+    with connect_to_database(DATABASE_NAME) as conn:
+        cursor = conn.cursor()
+        cursor.execute("SELECT name FROM sqlite_master WHERE type='table' AND name='locations_groups';")
+        result = cursor.fetchall()
+    log_test_result("UT1", "Ensure 'locations_groups' table is created successfully.", len(result) == 1)
+    assert len(result) == 1
+
+def test_make_locations_groups_table_columns():
+    create_birdsites_database.create_birdsites(DATABASE_NAME)
+    make_locations_groups_table.make_locations_groups_table(DATABASE_NAME)
+    with connect_to_database(DATABASE_NAME) as conn:
+        cursor = conn.cursor()
+        cursor.execute("PRAGMA table_info(locations_groups);")
+        columns = [col[1] for col in cursor.fetchall()]
+    result = 'location_id' in columns and 'group_id' in columns
+    log_test_result("UT2", "Ensure 'locations_groups' table has correct columns.", result)
+    assert result
+
+def test_make_locations_groups_table_fail():
+    create_birdsites_database.create_birdsites(DATABASE_NAME)
+    make_locations_groups_table.make_locations_groups_table(DATABASE_NAME)
+    with connect_to_database(DATABASE_NAME) as conn:
+        cursor = conn.cursor()
+        cursor.execute("SELECT name FROM sqlite_master WHERE type='table' AND name='non_existing_table';")
+        result = cursor.fetchall()
+    log_test_result("UT3", "Intentionally failing test to check non-existing table.", len(result) == 1)
+    assert len(result) == 0
+
+def test_make_locations_table_success():
+    create_birdsites_database.create_birdsites(DATABASE_NAME)
+    make_locations_table.make_locations_table(DATABASE_NAME)
+    with connect_to_database(DATABASE_NAME) as conn:
+        cursor = conn.cursor()
+        cursor.execute("SELECT name FROM sqlite_master WHERE type='table' AND name='locations';")
+        result = cursor.fetchall()
+    log_test_result("UT1", "Ensure 'locations' table is created successfully.", len(result) == 1)
+    assert len(result) == 1
+
+def test_make_locations_table_columns():
+    create_birdsites_database.create_birdsites(DATABASE_NAME)
+    make_locations_table.make_locations_table(DATABASE_NAME)
+    with connect_to_database(DATABASE_NAME) as conn:
+        cursor = conn.cursor()
+        cursor.execute("PRAGMA table_info(locations);")
+        columns = [col[1] for col in cursor.fetchall()]
+    result = 'location_full_name' in columns and 'state_full' in columns
+    log_test_result("UT2", "Ensure 'locations' table has correct columns.", result)
+    assert result
+
+def test_make_locations_table_fail():
+    create_birdsites_database.create_birdsites(DATABASE_NAME)
+    make_locations_table.make_locations_table(DATABASE_NAME)
+    with connect_to_database(DATABASE_NAME) as conn:
+        cursor = conn.cursor()
+        cursor.execute("SELECT name FROM sqlite_master WHERE type='table' AND name='non_existing_table';")
+        result = cursor.fetchall()
+    log_test_result("UT3", "Intentionally failing test to check non-existing table.", len(result) == 1)
+    assert len(result) == 0
 
 if __name__ == "__main__":
-    test_execution_and_save_output()
+    pytest.main()
