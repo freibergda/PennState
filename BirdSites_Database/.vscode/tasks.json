@@ -11,7 +11,7 @@
                 "-m",
                 "pytest",
                 "--capture=tee-sys",
-                "--log-file=./test_results.txt"
+                "--log-file=./test_report.txt"
             ],
             "group": {
                 "kind": "build",

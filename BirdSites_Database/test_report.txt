@@ -1,77 +1,416 @@
+---------------------------------------------
+Test Type: Unit
+Context: Database
+Test ID: S8S4-70-1
+Description: User Story: As an Administrator, I want the system to create the BirdSites database, so that I can create tables and load records into the BirdSites database.
+Test URL: N/A
+Preconditions: Given: the BirdSites.db database does not exist When: the system runs the create_birdsites function.
+Test Execution Steps:
+Step 1:
+Action: Run create_birdsites() function.
+Expected Response: BirdSites.db file is created.
+Expected Response: BirdSites.db is created successfully.
+Result: Passed
+Timestamp: 2024-07-28 16:49:40.495874
+Associated Requirements: Jira Task S8S4-18 The system shall create a database called BirdSites.
+---------------------------------------------
 
-				Jira Task S8S4-167
-Test ID: S8S4-167-1
-Description: Ensure all tables are created successfully.
+---------------------------------------------
+Test Type: Unit
+Context: Database
+Test ID: S8S4-70-2
+Description: User Story: As an Administrator, I want the system to create the BirdSites database twice, so that I can ensure idempotency.
+Test URL: N/A
+Preconditions: Given: the BirdSites.db database may or may not exist When: the system runs the create_birdsites function twice.
+Test Execution Steps:
+Step 1:
+Action: Run create_birdsites() function.
+Expected Response: BirdSites.db file is created.
+Step 2:
+Action: Run create_birdsites() function again.
+Expected Response: No error occurs, BirdSites.db file exists.
+Expected Response: BirdSites.db is created successfully on both attempts.
 Result: Passed
-Timestamp: 2024-07-21 20:58:09.607296
---------------------------------------------------
-Test ID: S8S4-167-2
-Description: Ensure 'administrator_records' table has correct columns.
+Timestamp: 2024-07-28 16:49:40.538353
+Associated Requirements: Jira Task S8S4-18 The system shall create a database called BirdSites.
+---------------------------------------------
+
+---------------------------------------------
+Test Type: Unit
+Context: Database
+Test ID: S8S4-70-3
+Description: User Story: As an Administrator, I want the system to handle errors gracefully during the BirdSites database creation.
+Test URL: N/A
+Preconditions: Given: An invalid path When: running the create_birdsites function.
+Test Execution Steps:
+Step 1:
+Action: Run create_birdsites() function with an invalid path.
+Expected Response: OperationalError is raised.
+Expected Response: OperationalError is raised as expected.
 Result: Passed
-Timestamp: 2024-07-21 20:58:09.607296
---------------------------------------------------
-Test ID: S8S4-167-3
-Description: Intentionally failing test to check non-existing table.
+Timestamp: 2024-07-28 16:49:40.546824
+Associated Requirements: Jira Task S8S4-18 The system shall create a database called BirdSites.
+---------------------------------------------
+
+---------------------------------------------
+Test Type: Unit
+Context: Database
+Test ID: S8S4-131-1
+Description: User Story: As an Administrator, I want the system to create a table called the administrator_records table.
+Test URL: N/A
+Preconditions: Given: the BirdSites.db database exists, but does not have the administrator_records table When: the system runs the make_admin_table function
+Test Execution Steps:
+Step 1:
+Action: Run make_admin_table() function.
+Expected Response: administrator_records table is created with correct schema.
+Expected Response: The administrator_records table is created successfully.
+Result: Passed
+Timestamp: 2024-07-28 16:49:40.560455
+Associated Requirements: Jira Task S8S4-19 The system shall create an administrative file.
+---------------------------------------------
+
+---------------------------------------------
+Test Type: Unit
+Context: Database
+Test ID: S8S4-131-2
+Description: User Story: As an Administrator, I want to verify the unique constraint on email column in the administrator_records table.
+Test URL: N/A
+Preconditions: Given: the BirdSites.db database exists and has the administrator_records table When: attempting to insert duplicate email
+Test Execution Steps:
+Step 1:
+Action: Run make_admin_table() function.
+Expected Response: administrator_records table is created with correct schema.
+Step 2:
+Action: Insert first record with unique email.
+Expected Response: First record insertion succeeds.
+Step 3:
+Action: Insert second record with the same email.
+Expected Response: Second record insertion fails due to unique constraint.
+Expected Response: Unique constraint works as expected.
+Result: Passed
+Timestamp: 2024-07-28 16:49:40.582579
+Associated Requirements: Jira Task S8S4-19 The system shall create an administrative file.
+---------------------------------------------
+
+---------------------------------------------
+Test Type: Unit
+Context: Database
+Test ID: S8S4-131-3
+Description: User Story: As an Administrator, I want to verify the NOT NULL constraint on email column in the administrator_records table.
+Test URL: N/A
+Preconditions: Given: the BirdSites.db database exists and has the administrator_records table When: attempting to insert record without email
+Test Execution Steps:
+Step 1:
+Action: Run make_admin_table() function.
+Expected Response: administrator_records table is created with correct schema.
+Step 2:
+Action: Insert record without email.
+Expected Response: Record insertion fails due to NOT NULL constraint.
+Expected Response: NOT NULL constraint works as expected.
+Result: Passed
+Timestamp: 2024-07-28 16:49:40.589560
+Associated Requirements: Jira Task S8S4-19 The system shall create an administrative file.
+---------------------------------------------
+
+---------------------------------------------
+Test Type: Unit
+Context: Database
+Test ID: S8S4-49-1
+Description: User Story: As an Administrator, I want the system to create a table called the Groups table in the BirdSites database.
+Test URL: N/A
+Preconditions: Given: the BirdSites.db database exists and the Groups table does not exist When: the system runs the make_groups_table function.
+Test Execution Steps:
+Step 1:
+Action: Run create_birdsites() function.
+Expected Response: BirdSites.db file is created.
+Step 2:
+Action: Run make_groups_table() function.
+Expected Response: Groups table is created in BirdSites.db.
+Expected Response: The Groups table is created successfully.
+Result: Passed
+Timestamp: 2024-07-28 16:49:40.607513
+Associated Requirements: Jira Task S8S4-23 The system shall create a Groups Table, which will be filled by an administrator.
+---------------------------------------------
+
+---------------------------------------------
+Test Type: Unit
+Context: Database
+Test ID: S8S4-49-2
+Description: User Story: As an Administrator, I want the Groups table to have predefined columns.
+Test URL: N/A
+Preconditions: Given: the BirdSites.db database exists and the Groups table is created When: the system runs the display_all_tables function.
+Test Execution Steps:
+Step 1:
+Action: Run create_birdsites() function.
+Expected Response: BirdSites.db file is created.
+Step 2:
+Action: Run make_groups_table() function.
+Expected Response: Groups table is created in BirdSites.db.
+Step 3:
+Action: Run display_all_tables() function.
+Expected Response: Groups table columns are fetched.
+Expected Response: The Groups table has the correct columns.
+Result: Passed
+Timestamp: 2024-07-28 16:49:40.614494
+Associated Requirements: Jira Task S8S4-23 The system shall create a Groups Table, which will be filled by an administrator.
+---------------------------------------------
+
+---------------------------------------------
+Test Type: Unit
+Context: Database
+Test ID: S8S4-49-3
+Description: User Story: As an Administrator, I want the system to handle schema errors gracefully when creating the Groups table.
+Test URL: N/A
+Preconditions: Given: the BirdSites.db database exists and the Groups table schema is intentionally modified When: the system runs the make_groups_table function.
+Test Execution Steps:
+Step 1:
+Action: Run create_birdsites() function.
+Expected Response: BirdSites.db file is created.
+Step 2:
+Action: Attempt to run make_groups_table() function after intentionally modifying the schema.
+Expected Response: An error occurs.
+Expected Response: An error occurs as expected.
+Result: Passed
+Timestamp: 2024-07-28 16:49:40.619481
+Associated Requirements: Jira Task S8S4-23 The system shall create a Groups Table, which will be filled by an administrator.
+---------------------------------------------
+
+---------------------------------------------
+Test Type: Unit
+Context: Database
+Test ID: S8S4-17-1
+Description: User Story: As an Administrator, I want the system to create a table called the locations_groups table in the BirdSites database.
+Test URL: N/A
+Preconditions: Given: the BirdSites.db database exists and the locations_groups table does not exist When: the system runs the make_locations_groups_table function.
+Test Execution Steps:
+Step 1:
+Action: Run create_birdsites() function.
+Expected Response: BirdSites.db file is created.
+Step 2:
+Action: Run make_locations_groups_table() function.
+Expected Response: locations_groups table is created in BirdSites.db.
+Expected Response: The locations_groups table is created successfully.
+Result: Passed
+Timestamp: 2024-07-28 16:49:40.636435
+Associated Requirements: Jira Task S8S4-25 The system shall create a Locations-Groups Table, which will be filled by the administrator.
+---------------------------------------------
+
+---------------------------------------------
+Test Type: Unit
+Context: Database
+Test ID: S8S4-17-2
+Description: User Story: As an Administrator, I want the locations_groups table to have predefined columns.
+Test URL: N/A
+Preconditions: Given: the BirdSites.db database exists and the locations_groups table is created When: the system runs the display_all_tables function.
+Test Execution Steps:
+Step 1:
+Action: Run create_birdsites() function.
+Expected Response: BirdSites.db file is created.
+Step 2:
+Action: Run make_locations_groups_table() function.
+Expected Response: locations_groups table is created in BirdSites.db.
+Step 3:
+Action: Run display_all_tables() function.
+Expected Response: locations_groups table columns are fetched.
+Expected Response: The locations_groups table has the correct columns.
+Result: Passed
+Timestamp: 2024-07-28 16:49:40.649015
+Associated Requirements: Jira Task S8S4-25 The system shall create a Locations-Groups Table, which will be filled by the administrator.
+---------------------------------------------
+
+---------------------------------------------
+Test Type: Unit
+Context: Database
+Test ID: S8S4-17-3
+Description: User Story: As an Administrator, I want the system to handle schema errors gracefully when creating the locations_groups table.
+Test URL: N/A
+Preconditions: Given: the BirdSites.db database exists and the locations_groups table schema is intentionally modified When: the system runs the make_locations_groups_table function.
+Test Execution Steps:
+Step 1:
+Action: Run create_birdsites() function.
+Expected Response: BirdSites.db file is created.
+Step 2:
+Action: Run make_locations_groups_table() function with incorrect schema.
+Expected Response: An error occurs.
+Expected Response: An error occurs as expected.
+Result: Passed
+Timestamp: 2024-07-28 16:49:40.657268
+Associated Requirements: Jira Task S8S4-25 The system shall create a Locations-Groups Table, which will be filled by the administrator.
+---------------------------------------------
+
+---------------------------------------------
+Test Type: Unit
+Context: Database
+Test ID: S8S4-15-1
+Description: User Story: As an Administrator, I want the system to create a table called the Locations table in the BirdSites database.
+Test URL: N/A
+Preconditions: Given: the BirdSites.db database exists and the Locations table does not exist When: the system runs the make_locations_table function.
+Test Execution Steps:
+Step 1:
+Action: Run create_birdsites() function.
+Expected Response: BirdSites.db file is created.
+Step 2:
+Action: Run make_locations_table() function.
+Expected Response: Locations table is created in BirdSites.db.
+Expected Response: Locations table is created successfully.
+Result: Passed
+Timestamp: 2024-07-28 16:49:40.673326
+Associated Requirements: Jira Task S8S4-21 The system shall create a Location Table, which will be filled by an administrator.
+---------------------------------------------
+
+---------------------------------------------
+Test Type: Unit
+Context: Database
+Test ID: S8S4-15-2
+Description: User Story: As an Administrator, I want the Locations table to have predefined columns.
+Test URL: N/A
+Preconditions: Given: the BirdSites.db database exists and the Locations table is created When: the system runs the display_all_tables function.
+Test Execution Steps:
+Step 1:
+Action: Run create_birdsites() function.
+Expected Response: BirdSites.db file is created.
+Step 2:
+Action: Run make_locations_table() function.
+Expected Response: Locations table is created in BirdSites.db.
+Step 3:
+Action: Run display_all_tables() function.
+Expected Response: Locations table columns are fetched.
+Expected Response: The Locations table has the correct columns.
+Result: Passed
+Timestamp: 2024-07-28 16:49:40.687605
+Associated Requirements: Jira Task S8S4-21 The system shall create a Location Table, which will be filled by an administrator.
+---------------------------------------------
+
+---------------------------------------------
+Test Type: Unit
+Context: Database
+Test ID: S8S4-15-3
+Description: User Story: As an Administrator, I want to test insertion of incomplete record into the Locations table.
+Test URL: N/A
+Preconditions: Given: the BirdSites.db database exists and the Locations table is created When: attempting to insert a record without required columns
+Test Execution Steps:
+Step 1:
+Action: Run create_birdsites() function.
+Expected Response: BirdSites.db file is created.
+Step 2:
+Action: Run make_locations_table() function.
+Expected Response: Locations table is created in BirdSites.db.
+Step 3:
+Action: Insert incomplete record into locations table.
+Expected Response: Insertion fails due to NOT NULL constraint.
+Expected Response: Insertion fails due to NOT NULL constraint.
+Result: Passed
+Timestamp: 2024-07-28 16:49:40.694724
+Associated Requirements: Jira Task S8S4-21 The system shall create a Location Table, which will be filled by an administrator.
+---------------------------------------------
+
+---------------------------------------------
+Test Type: Unit
+Context: Database
+Test ID: S8S4-139-1
+Description: User Story: As an Administrator, I want the system to show me a list of all the current tables in the BirdSites database.
+Test URL: N/A
+Preconditions: Given: the BirdSites database When: The system runs the display_all_tables function.
+Test Execution Steps:
+Step 1:
+Action: Run create_birdsites() function.
+Expected Response: Database BirdSites.db is created.
+Step 2:
+Action: Run make_admin_table() function.
+Expected Response: Administrator table is created.
+Step 3:
+Action: Run make_locations_table() function.
+Expected Response: Locations table is created.
+Step 4:
+Action: Run make_groups_table() function.
+Expected Response: Groups table is created.
+Step 5:
+Action: Run make_locations_groups_table() function.
+Expected Response: Locations-Groups table is created.
+Step 6:
+Action: Run display_all_tables() function.
+Expected Response: List of all tables is displayed.
+Expected Response: The tables 'administrator_records', 'locations', 'groups', 'locations_groups' should be listed.
+Result: Passed
+Timestamp: 2024-07-28 16:49:40.704804
+Associated Requirements: Jira Task S8S4-46 The system shall display the complete database structure for the Administrator's verification
+---------------------------------------------
+
+Table: administrator_records, Columns: ['id', 'login', 'email']
+Table: groups, Columns: ['group_id', 'spring_migration', 'fall_migration', 'summer', 'winter', 'atlantic_flyway', 'central_flyway', 'pacific_flyway']
+Table: locations_groups, Columns: ['location_id', 'group_id']
+Table: locations, Columns: ['location_id', 'location_full_name', 'county', 'state_full', 'latitude', 'longitude', 'link_to_NWS', 'link_to_park', 'link_to_eBird', 'link_to_BirdCast']
+Table: sqlite_sequence, Columns: ['name', 'seq']
+---------------------------------------------
+Test Type: Unit
+Context: Database
+Test ID: S8S4-139-2
+Description: User Story: As an Administrator, I want the system to accurately display all tables, including those with bad schema.
+Test URL: N/A
+Preconditions: Given: the BirdSites database When: a table with a bad schema is manually created.
+Test Execution Steps:
+Step 1:
+Action: Run create_birdsites() function.
+Expected Response: Database BirdSites.db is created.
+Step 2:
+Action: Run make_admin_table() function.
+Expected Response: Administrator table is created.
+Step 3:
+Action: Run make_locations_table() function.
+Expected Response: Locations table is created.
+Step 4:
+Action: Manually add an incorrect schema table.
+Expected Response: Incorrect table is created.
+Step 5:
+Action: Run display_all_tables() function.
+Expected Response: List of all tables is displayed, including the incorrect table.
+Expected Response: The system correctly identifies the presence of tables with incorrect schemas.
+Result: Passed
+Timestamp: 2024-07-28 16:49:40.721154
+Associated Requirements: Jira Task S8S4-46 The system shall display the complete database structure for the Administrator's verification
+---------------------------------------------
+
+Table: administrator_records, Columns: ['id', 'login', 'email']
+Table: groups, Columns: ['group_id', 'spring_migration', 'fall_migration', 'summer', 'winter', 'atlantic_flyway', 'central_flyway', 'pacific_flyway']
+Table: locations_groups, Columns: ['location_id', 'group_id']
+Table: locations, Columns: ['location_id', 'location_full_name', 'county', 'state_full', 'latitude', 'longitude', 'link_to_NWS', 'link_to_park', 'link_to_eBird', 'link_to_BirdCast']
+Table: sqlite_sequence, Columns: ['name', 'seq']
+Table: incorrect_table, Columns: ['bad_column']
+---------------------------------------------
+Test Type: Unit
+Context: Database
+Test ID: S8S4-139-3
+Description: User Story: As an Administrator, I want the system to fail this test for demonstration purposes.
+Test URL: N/A
+Preconditions: Given: the BirdSites database When: The system runs the display_all_tables function.
+Test Execution Steps:
+Step 1:
+Action: Run create_birdsites() function.
+Expected Response: Database BirdSites.db is created.
+Step 2:
+Action: Run make_admin_table() function.
+Expected Response: Administrator table is created.
+Step 3:
+Action: Run make_locations_table() function.
+Expected Response: Locations table is created.
+Step 4:
+Action: Run make_groups_table() function.
+Expected Response: Groups table is created.
+Step 5:
+Action: Run make_locations_groups_table() function.
+Expected Response: Locations-Groups table is created.
+Step 6:
+Action: Run display_all_tables() function.
+Expected Response: List of all tables is displayed.
+Expected Response: The tables 'admin_records', 'locations_wrong', 'groups_wrong', 'locations_groups_wrong' should be listed.
 Result: Failed
-Timestamp: 2024-07-21 20:58:09.630642
---------------------------------------------------
-Test ID: S8S4-167-4
-Description: Ensure 'administrator_records' table is created successfully.
-Result: Passed
-Timestamp: 2024-07-21 20:58:09.638631
---------------------------------------------------
-Test ID: S8S4-167-5
-Description: Ensure 'administrator_records' table has correct columns.
-Result: Passed
-Timestamp: 2024-07-21 20:58:09.648888
---------------------------------------------------
-Test ID: S8S4-167-6
-Description: Intentionally failing test to check non-existing table.
-Result: Failed
-Timestamp: 2024-07-21 20:58:09.655568
---------------------------------------------------
-Test ID: S8S4-167-7
-Description: Ensure 'groups' table is created successfully.
-Result: Passed
-Timestamp: 2024-07-21 20:58:09.664070
---------------------------------------------------
-Test ID: S8S4-167-8
-Description: Ensure 'groups' table has correct columns.
-Result: Passed
-Timestamp: 2024-07-21 20:58:09.669487
---------------------------------------------------
-Test ID: S8S4-167-9
-Description: Intentionally failing test to check non-existing table.
-Result: Failed
-Timestamp: 2024-07-21 20:58:09.674036
---------------------------------------------------
-Test ID: S8S4-167-10
-Description: Ensure 'locations_groups' table is created successfully.
-Result: Passed
-Timestamp: 2024-07-21 20:58:09.682690
---------------------------------------------------
-Test ID: S8S4-167-11
-Description: Ensure 'locations_groups' table has correct columns.
-Result: Passed
-Timestamp: 2024-07-21 20:58:09.688417
---------------------------------------------------
-Test ID: S8S4-167-12
-Description: Intentionally failing test to check non-existing table.
-Result: Failed
-Timestamp: 2024-07-21 20:58:09.695628
---------------------------------------------------
-Test ID: S8S4-167-13
-Description: Ensure 'locations' table is created successfully.
-Result: Passed
-Timestamp: 2024-07-21 20:58:09.701419
---------------------------------------------------
-Test ID: S8S4-167-14
-Description: Ensure 'locations' table has correct columns.
-Result: Passed
-Timestamp: 2024-07-21 20:58:09.704439
---------------------------------------------------
-Test ID: S8S4-167-15
-Description: Intentionally failing test to check non-existing table.
-Result: Failed
-Timestamp: 2024-07-21 20:58:09.714420
---------------------------------------------------
+Timestamp: 2024-07-28 16:49:40.736833
+Associated Requirements: Jira Task S8S4-46 The system shall display the complete database structure for the Administrator's verification
+---------------------------------------------
+
+Table: administrator_records, Columns: ['id', 'login', 'email']
+Table: groups, Columns: ['group_id', 'spring_migration', 'fall_migration', 'summer', 'winter', 'atlantic_flyway', 'central_flyway', 'pacific_flyway']
+Table: locations_groups, Columns: ['location_id', 'group_id']
+Table: locations, Columns: ['location_id', 'location_full_name', 'county', 'state_full', 'latitude', 'longitude', 'link_to_NWS', 'link_to_park', 'link_to_eBird', 'link_to_BirdCast']
+Table: sqlite_sequence, Columns: ['name', 'seq']
+Table: incorrect_table, Columns: ['bad_column']
