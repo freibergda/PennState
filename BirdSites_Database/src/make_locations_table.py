@@ -16,22 +16,29 @@ Given:  the BirdSites.db database exists and the Locations table does not exist
 When:  the system runs the make_location_table module
 Then: the locations table is created in the BirdSites.db database
 variables: database_name
-parameters: none'''
+parameters: none
+Associated Requirements:
+Jira Task S8S4-21 The system shall create a Location Table, 
+which will be filled by an administrator.'''
+
 import sqlite3
 
 def make_locations_table(database_name):
-    conn = sqlite3.connect(database_name)
-    cursor = conn.cursor()
-    cursor.execute('''CREATE TABLE IF NOT EXISTS locations (
-                      location_id INTEGER PRIMARY KEY AUTOINCREMENT,
-                      location_full_name TEXT NOT NULL,
-                      county TEXT,
-                      state_full TEXT,
-                      latitude INTEGER,
-                      longitude INTEGER,
-                      link_to_NWS TEXT,
-                      link_to_park TEXT,
-                      link_to_eBird TEXT,
-                      link_to_BirdCast TEXT)''')
-    conn.commit()
-    conn.close()
+    try:
+        conn = sqlite3.connect(database_name)
+        cursor = conn.cursor()
+        cursor.execute('''CREATE TABLE IF NOT EXISTS locations (
+                          location_id INTEGER PRIMARY KEY AUTOINCREMENT,
+                          location_full_name TEXT NOT NULL,
+                          county TEXT,
+                          state_full TEXT,
+                          latitude INTEGER,
+                          longitude INTEGER,
+                          link_to_NWS TEXT,
+                          link_to_park TEXT,
+                          link_to_eBird TEXT,
+                          link_to_BirdCast TEXT)''')
+        conn.commit()
+    finally:
+        if 'conn' in locals() and conn:
+            conn.close()
