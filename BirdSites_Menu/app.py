@@ -42,11 +42,9 @@ if "role" not in st.session_state:
 # Retrieve the role from Session State to initialize the widget
 st.session_state._role = st.session_state.role
 
-
 def set_role():
     # Callback function to save the role selection to Session State
     st.session_state.role = st.session_state._role
-
 
 st.title('BirdSites Database')
 

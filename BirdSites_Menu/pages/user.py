@@ -3,7 +3,8 @@ User Story: As a User, I want the BirdSites database to create
 a drop down box of states, for optional selection by the
 User, alternatively, to display a drop down list of migratory 
 flyways for User selection.  I want to display the results in a 
-dashboard, filtered also by the current season.
+dashboard, filtered also by the current season if the user chose
+a flyway.
 Unit Tests:
 System Test:
 Acceptance Criteria:
@@ -132,7 +133,7 @@ sel_rows = pd.DataFrame(data["selected_rows"])
 # Ensure sel_rows is not empty
 if not sel_rows.empty:
     selected_row = sel_rows.iloc[0]  # Single selection ensures only one row
-    col1, col2, col3, col4, col5, col6, col7, col8, col9 = st.columns(9)
+    col1, col2, col3, col4, col5, col6 = st.columns(6)
 
     with col1:
         st.markdown("##### Site Name")
@@ -162,14 +163,17 @@ if not sel_rows.empty:
     fig.update_layout(margin={"r":0, "t":0, "l":0, "b":0})
 
     st.plotly_chart(fig)
+    
+    # extract the API key from the system secrets file
+    # like the passwords, the API key is encrypted and 
+    # is not stored on github
+    st.info("Current bird sightings by species within 10 miles of your selected location during the last 7 days. Click on the icons to expand.")
+    api_Key = st.secrets["my_cool_secrets"]["eBird_API"]
+
+    # get the selected record from eBird_API by latitude and longitude
+    records = get_nearby_observations(api_Key, selected_row['latitude'], selected_row['longitude'], dist=10, back=7)    
+    st.write(records)
+    
 else:
     st.warning("No rows selected or no data available.")
-# fix for future
-#st.info('eBird demonstration nested list for 10 miles out, period last 7 days: ','latitude','','longitude')
-api_Key = st.secrets["my_cool_secrets"]["eBird_API"]
 
-# fix for future needs abs values
-#records = get_nearby_observations(api_Key, 'latitude', 'longitude', dist=10, back=7)    
-
-records = get_nearby_observations(api_Key, 39.885866, -75.262356, dist=10, back=7)
-st.write(records)

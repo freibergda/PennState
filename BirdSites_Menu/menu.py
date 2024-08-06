@@ -46,6 +46,12 @@ import streamlit as st
 
 import hmac
 
+st.set_page_config(
+page_title = 'BirdSites Database',
+page_icon = '✅',
+layout = 'wide'
+)   
+
 def authenticated_menu():
     # Show a navigation menu for authenticated users
     st.sidebar.page_link("pages/admin.py", label="Database Administrator")
@@ -97,15 +103,14 @@ def unauthenticated_menu():
         if not check_password():
             st.stop()
 
-
 def menu():
     '''Determine if a user is logged in or not, then show the correct
     navigation menu'''
+
     if "role" not in st.session_state or st.session_state.role is None:
         unauthenticated_menu()
         return
     authenticated_menu()
-
 
 def menu_with_redirect():
     '''Redirect users to the main page if not logged in, otherwise continue to
