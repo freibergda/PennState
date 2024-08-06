@@ -1,18 +1,34 @@
-'''Jira Task S8S4-67 User Story:  As an Administrator, I want to either view the BirdSites 
-database structure or create/modify records in the BirdSites database.  
+'''Jira Task S8S4-67  User Story:  As an Administrator, I want 
+to either view the BirdSites database structure or 
+create/modify records in the BirdSites database.  Alternatively,
+as a Administrator or User, I want to access the User menu.
 Unit Tests: 
 System Test:
-Acceptance Criteria:  to be written
-Given:  The BirdSites database exists, has tables loaded and the individual 
-has an admin login.
-When:  The menu app is activated and admin functions are selected.
-Then:  The administrator is presented with the choice of either seeing 
-the display of the BirdSites database structure or of creating/modifying 
-records in the BirdSites database.
-Variables: link to the locations where the code that displays the BirdSites 
-database structure or the code that allows the creating/modifying of 
-records in the BirdSites database.
-Parameters: none 
+Acceptance Criteria:  The menus function correctly and 
+either display the database structure, allow the 
+administrator to create or modify records.  Alternatively, 
+the system will allow the Administrator or User to access 
+the User menu.
+
+Given:  The BirdSites database exists, has tables loaded 
+and the individual has an admin login.  Alternatively, 
+the individual has a user login.
+
+When:  The menu app is activated, the user logs in, and
+the system selects the available actions based on the login 
+(administrator or user).
+
+Then:  Based on the login role, the administrator is presented 
+with the choice of either seeing the display of the BirdSites database structure 
+or of then creating/modifying records in the BirdSites 
+database. The administrator or the user is presented with 
+the BirdSites database with selection options.
+
+Variables: link to the locations where the code that displays 
+the BirdSites database structure, the code that allows 
+the creating/modifying of records in the BirdSites database, 
+or the code that presents the BirdSites database for user 
+selection.
 
 Jira Task S8S4-4 User Story:  As an Administrator, I want to create or modify an administrator 
 access the secrets file in the system .streamlit folder to grant 
@@ -30,12 +46,10 @@ import streamlit as st
 
 import hmac
 
-
 def authenticated_menu():
     # Show a navigation menu for authenticated users
     st.sidebar.page_link("pages/admin.py", label="Database Administrator")
     st.sidebar.page_link("pages/user.py", label="User")
-
 
 def unauthenticated_menu():
     '''Show a navigation menu for unauthenticated users'''
